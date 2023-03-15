@@ -13,13 +13,15 @@ refs.searchForm.addEventListener('input', onSearch);
 function onSearch(e) { 
     e.preventDefault();
 
-    const textInput = e.currentTarget.value;
+    let textInput = e.currentTarget.value;
     console.log(textInput)
+    
     fetchCountries(textInput)
     .then(renderMarkup)
     .catch(error => {
         Notiflix.Notify.failure('Oops, there is no country with that name')
-    });
+    })
+    .finally(console.log('done'))
 };
 
 
@@ -30,23 +32,16 @@ function fetchCountries(countryName) {
         return response.json()
     })
 };
-// fetch('https://restcountries.com/v3.1/name/ru')
-//     .then(response => {
-//         return response.json()
-//     })
-
-//     .then(renderMarkup)
-
-//     .catch(error => {
-//     Notiflix.Notify.failure('Oops, there is no country with that name')
-//     });
 
 function renderMarkup(country) { 
+    console.log(country.length)
     if (country.length > 10) {
         Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
 
-    } else if (country.length >= 2 || country.length > 10) {
+    } else if (country.length >= 2 || country.length < 10) {
         country.forEach(el => {
+            textInput = '';
+            // refs.countryContainer.innerHTML = '';
             refs.countryList.insertAdjacentHTML('beforeend', `
                 <li class="country-list__item">
                     <div class="country-list__container">
@@ -69,5 +64,6 @@ function renderMarkup(country) {
                     <p class="country-info__text"><b>Languages:</b> ${Object.values(country[0].languages)}</p>
                 </div>
     `;
+    
 };
 
