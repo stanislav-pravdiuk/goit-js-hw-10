@@ -14,17 +14,14 @@ function onSearch(e) {
     e.preventDefault();
 
     let textInput = e.currentTarget.value;
-    console.log(textInput)
     
     fetchCountries(textInput)
-    .then(renderMarkup)
-    .catch(error => {
-        Notiflix.Notify.failure('Oops, there is no country with that name')
-    })
-    .finally(console.log('done'))
+        .then(renderMarkup)
+        .catch(error => {
+            Notiflix.Notify.failure('Oops, there is no country with that name')
+        })
+        .finally(refs.countryContainer.innerHTML = '', refs.countryList.innerHTML = '')
 };
-
-
 
 function fetchCountries(countryName) { 
     return fetch(`https://restcountries.com/v3.1/name/${countryName}`)
@@ -37,12 +34,11 @@ function renderMarkup(country) {
     console.log(country.length)
     if (country.length > 10) {
         Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+        // refs.countryContainer.innerHTML = '';
 
-    } else if (country.length >= 2 || country.length < 10) {
+    } else if (country.length <= 10 && country.length >= 2) {
         country.forEach(el => {
-            textInput = '';
-            // refs.countryContainer.innerHTML = '';
-            refs.countryList.insertAdjacentHTML('beforeend', `
+        refs.countryList.insertAdjacentHTML('beforeend', `
                 <li class="country-list__item">
                     <div class="country-list__container">
                         <img class="country-list__img" src="${el.flags.svg}" alt="${el.flags.alt}">
@@ -51,9 +47,8 @@ function renderMarkup(country) {
                 </li>
                 `)
         });
-    } else
-    refs.countryList.innerHTML = '';
-    refs.countryContainer.innerHTML = `
+    } else if (country.length == 1) {
+        refs.countryContainer.innerHTML = `
                 <div class="country-info__imgContainer">
                     <img class="country-info__img" src="${country[0].flags.svg}" alt="${country[0].flags.alt}">
                     <h1 class="country-info__name">${country[0].name.official}</h1>
@@ -64,6 +59,6 @@ function renderMarkup(country) {
                     <p class="country-info__text"><b>Languages:</b> ${Object.values(country[0].languages)}</p>
                 </div>
     `;
-    
+    }
 };
 
