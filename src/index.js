@@ -10,12 +10,11 @@ const refs = {
     searchForm: document.querySelector('#search-box')
 };
 
-refs.searchForm.addEventListener('input', debounce(() => { onSearch }, DEBOUNCE_DELAY));
+refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
 function onSearch(e) {
     e.preventDefault();
-
-    let textInput = e.currentTarget.value;
+    let textInput = e.target.value;
     
     API.fetchCountries(textInput)
         .then(renderMarkup)
