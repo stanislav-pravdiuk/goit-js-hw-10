@@ -4,4 +4,4 @@ function fetchCountries(countryName) {
 )
 };
 
-export default {fetchCountries}
+export default {fetchCountries} 
