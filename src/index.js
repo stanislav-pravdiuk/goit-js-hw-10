@@ -15,13 +15,13 @@ refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 function onSearch(e) {
     e.preventDefault();
     let textInput = e.target.value.trim();
+    resetMarkup();
     if (textInput === '') {
         return
     };
     API.fetchCountries(textInput)
         .then(renderMarkup)
         .catch(onFetchError)
-        .finally(resetMarkup())
 };
 
 function renderMarkup(country) { 
@@ -30,16 +30,21 @@ function renderMarkup(country) {
         Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
 
     } else if (country.length <= 10 && country.length >= 2) {
-        country.forEach(el => {
-        refs.countryList.insertAdjacentHTML('beforeend', `
-                <li class="country-list__item">
-                    <div class="country-list__container">
-                        <img class="country-list__img" src="${el.flags.svg}" alt="${el.flags.alt}">
-                        <p class="country-list__text"><b>${el.name.official}</b></p>
-                    </div>
-                </li>
-                `)
-        });
+
+        const createdElements = country.map(el => {
+            const createdElement = `
+            <li class="country-list__item">
+                <div class="country-list__container">
+                    <img class="country-list__img" src="${el.flags.svg}" alt="${el.flags.alt}">
+                    <p class="country-list__text"><b>${el.name.official}</b></p>
+                </div>
+            </li>
+            `;
+            return createdElement;
+        }).join('')
+        
+        refs.countryList.innerHTML = createdElements;
+
     } else if (country.length == 1) {
         refs.countryContainer.innerHTML = `
                 <div class="country-info__imgContainer">

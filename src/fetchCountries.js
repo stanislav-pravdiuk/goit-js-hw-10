@@ -1,6 +1,5 @@
 function fetchCountries(countryName) { 
-    const url = `https://restcountries.com/v3.1/name/${countryName}`
-    // return fetch(url).then(response => response.json()
+    const url = `https://restcountries.com/v3.1/name/${countryName}`;
     return fetch(url).then(response => {
         if (response.ok) {
             return response.json()
