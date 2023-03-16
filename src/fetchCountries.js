@@ -1,6 +1,7 @@
 function fetchCountries(countryName) { 
-    const url = `https://restcountries.com/v3.1/name/${countryName}`;
+    const url = `https://restcountries.com/v3.1/name/${countryName}?fields=name,flags,capital,population,languages`;
     return fetch(url).then(response => {
+        console.log(response.json())
         if (response.ok) {
             return response.json()
         } throw new Error(response.statusText)
