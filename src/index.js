@@ -15,7 +15,9 @@ refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 function onSearch(e) {
     e.preventDefault();
     let textInput = e.target.value.trim();
-    
+    if (textInput === '') {
+        return
+    };
     API.fetchCountries(textInput)
         .then(renderMarkup)
         .catch(onFetchError)
